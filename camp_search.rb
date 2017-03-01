@@ -7,17 +7,7 @@ require 'capybara'
 require 'capybara/dsl'
 
 PARKS = {
-  samuel_p_taylor_sp:  {contract_code: 'CA',   park_id: '120081' },
-  kirby_cove:          {contract_code: 'NRSO', park_id: '70972'  },
-  mt_tamalpais_sp:     {contract_code: 'CA',   park_id: '120063' },
-  anthony_chabot:      {contract_code: 'EB',   park_id: '110004' },
-  mt_diablo:           {contract_code: 'CA',   park_id: '120061' },
-  sugarloaf_ridge:     {contract_code: 'CA',   park_id: '120092' },
-  half_moon_bay:       {contract_code: 'CA',   park_id: '120039' },
-  del_valle:           {contract_code: 'EB',   park_id: '110003' },
-  bothenapa_valley_sp: {contract_code: 'CA',   park_id: '120011' },
-  portola_redwoods_sp: {contract_code: 'CA',   park_id: '120073' },
-  butano_sp:           {contract_code: 'CA',   park_id: '120013' }
+  'Bahia Honda State Park':  {contract_code: 'FL',   park_id: '281005' },
 }.merge(YAML.load(File.read('parks.yml')))
 
 DAY_OF_WEEK = %i[friday saturday sunday monday tuesday wednesday thursday]
@@ -66,7 +56,7 @@ def find_available_weekends(campsite_url, preferred_day: :friday, length_of_stay
     end
     campsite_availability_rows = page.all('#calendar.items tbody tr')
     campsite_availability_rows.each do |row|
-      next unless row.has_selector?('td.sn') && row.has_selector?('img') && /tent/.match(row.find('img')[:src])
+      next unless row.has_selector?('td.sn') && row.has_selector?('img') && /rv/.match(row.find('img')[:src])
 
       campsite_name = row.find('td.sn').text
       campsite_link = row.find('td.sn').find('.siteListLabel a')[:href]
@@ -197,6 +187,7 @@ else
   url = PARK_AVAILABILITY_URL.(park_contract_code, park_id)
   puts "\nSearching for available campsites at #{format_park_name(park_key)} park...\n\n"
 end
+
 
 available_weekends = find_available_weekends(url, preferred_day: preferred_day, length_of_stay_in_nights: length_of_stay_in_nights)
 
