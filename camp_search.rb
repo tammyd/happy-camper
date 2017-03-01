@@ -1,8 +1,10 @@
+require 'rubygems'
 require 'yaml'
 require 'date'
 require 'open-uri'
 require 'capybara/poltergeist'
 require 'capybara'
+require 'capybara/dsl'
 
 PARKS = {
   samuel_p_taylor_sp:  {contract_code: 'CA',   park_id: '120081' },
